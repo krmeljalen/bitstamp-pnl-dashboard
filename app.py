@@ -69,8 +69,8 @@ def hide():
         pickle.dump(txs, f)
     return redirect('/')
 
-@app.route("/hide_all")
-def hide_all():
+@app.route("/hideall")
+def hideall():
     txs = []
     if os.path.exists("hidden.pkl"):
         with open("hidden.pkl", "rb") as f:
