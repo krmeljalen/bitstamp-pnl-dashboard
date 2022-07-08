@@ -77,7 +77,8 @@ def hideall():
             txs = pickle.load(f)
 
     for transaction in api.get_transactions():
-        txs.append(transaction["id"])
+        if transaction["id"] not in txs:
+            txs.append(transaction["id"])
 
     with open("hidden.pkl", "wb") as f:
         pickle.dump(txs, f)
