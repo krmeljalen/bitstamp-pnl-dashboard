@@ -22,7 +22,7 @@ def remove_blacklisted(transactions):
     closed = get_closed()
     active_transactions = copy.copy(transactions)
     for transaction in transactions:
-        if str(transaction['id']) in closed:
+        if str(transaction['id']) in closed or transactions["side"] == "sell":
             active_transactions.remove(transaction)
     return active_transactions
 
