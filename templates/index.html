@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul class="pagination">
+    {% for ticker in tickers %}
+        {% if ticker != "BTC/USDC" and ticker != "USDC/USD" %}
+            <li>
+            <div class="alert alert-block">
+                {{ ticker }}
+                <span class="badge badge-info" style="font-size: 1em;">{{ tickers[ticker] }}</span>
+            </div></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+    <div class="table-responsive col-md-12" style="float: left">
+    <h2> Buys </h2>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Side</th>
+            <th scope="col">Pair</th>
+            <th scope="col">Price</th>
+            <th scope="col">Amount</th>
+            <th scope="col">PnL</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                {% if transaction['side'] == "buy" %}
+                    <td><span class="badge badge-success">{{ transaction['side'] }}</span></td>
+                    <td>{{ transaction['symbol'] }}</td>
+                    <td>{{ transaction['price'] }}</td>
+                    <td>{{ (transaction['amount'] * transaction['price']) | int }} USD</td>
+                        {% if transaction['current_price'] >  transaction['price'] %}
+                            <td><span class="badge badge-success">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} USD</span></td>
+                        {% else %}
+                            <td><span class="badge badge-danger">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} USD</span></td>
+                        {% endif %}
+                        <td><a href="/close?id={{ transaction['id'] }}"><button type="button" class="btn btn-light">Close</button></a></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock %}
