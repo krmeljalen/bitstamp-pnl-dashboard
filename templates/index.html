@@ -20,7 +20,7 @@
             <th scope="col">Price</th>
             <th scope="col">Amount</th>
             <th scope="col">PnL</th>
-            <th scope="col"></th>
+            <th scope="col"><a href="/close_all"><button type="button" class="btn btn-light">Hide all</button></a></th>
           </tr>
         </thead>
         <tbody>
@@ -35,7 +35,7 @@
                     {% else %}
                         <td><span class="badge badge-danger">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} USD</span></td>
                     {% endif %}
-                    <td><a href="/close?id={{ transaction['id'] }}"><button type="button" class="btn btn-light">Close</button></a></td>
+                    <td><a href="/hide?id={{ transaction['id'] }}"><button type="button" class="btn btn-light">Hide</button></a></td>
             </tr>
         {% endfor %}
         </tbody>

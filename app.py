@@ -19,19 +19,18 @@ def index():
     return render_template("index.html", transactions=transactions[::-1], tickers=tickers)
 
 def remove_blacklisted(transactions):
-    closed = get_closed()
+    hidden = get_hidden()
     active_transactions = copy.copy(transactions)
     for transaction in transactions:
-        if str(transaction['id']) in closed or transaction["side"] == "sell":
+        if str(transaction['id']) in hidden or transaction["side"] == "sell":
             active_transactions.remove(transaction)
     return active_transactions
 
-def get_closed():
+def get_hidden():
     txs = []
-    if os.path.exists("closed.pkl"):
-        with open("closed.pkl", "rb") as f:
+    if os.path.exists("hidden.pkl"):
+        with open("hidden.pkl", "rb") as f:
             txs = pickle.load(f)
-    print("Closed txs:", txs)
     return txs
 
 def enrich_data(transactions):
@@ -53,20 +52,34 @@ def enrich_data(transactions):
 
     return ticker_data, transactions
 
-@app.route("/close", methods=['GET'])
-def close():
+@app.route("/hide", methods=['GET'])
+def hide():
     args = request.args
     txid = args.get("id")
 
     txs = []
-    if os.path.exists("closed.pkl"):
-        with open("closed.pkl", "rb") as f:
+    if os.path.exists("hidden.pkl"):
+        with open("hidden.pkl", "rb") as f:
             txs = pickle.load(f)
 
     if txid not in txs:
         txs.append(txid)
 
-    with open("closed.pkl", "wb") as f:
+    with open("hidden.pkl", "wb") as f:
+        pickle.dump(txs, f)
+    return redirect('/')
+
+@app.route("/hide_all")
+def hide_all():
+    txs = []
+    if os.path.exists("hidden.pkl"):
+        with open("hidden.pkl", "rb") as f:
+            txs = pickle.load(f)
+
+    for transaction in api.get_transactions():
+        txs.append(transaction["id"])
+
+    with open("hidden.pkl", "wb") as f:
         pickle.dump(txs, f)
     return redirect('/')
 
