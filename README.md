@@ -13,6 +13,8 @@ Sell button exists, but is disabled for safety reasons. In order to sell you nee
 
 ## Installation
 
+Copy `config.yaml.dist` to `config.yaml` and edit api key and secret, please make sure you only tick transactions view in API capabilities. Optionally you can allow sell orders if you really wish to.
+
 ```
 pip install -r requirements.txt
 export FLASK_APP=app
