@@ -94,6 +94,8 @@ def sell():
     for transaction in api.get_transactions():
         if str(transaction["id"]) == str(txid):
             api.sell(transaction["symbol"], transaction['amount'])
+            hide_tx(txid)
+    return redirect('/')
 
 
 @app.route("/transactions")
