@@ -35,6 +35,7 @@
                     {% else %}
                         <td><span class="badge badge-danger">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} USD</span></td>
                     {% endif %}
+                    <td><a href="#"><button type="button" class="btn btn-danger">Sell</button></a></td>
                     <td><a href="/hide?id={{ transaction['id'] }}"><button type="button" class="btn btn-light">Hide</button></a></td>
             </tr>
         {% endfor %}

@@ -15,16 +15,28 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    tickers, transactions = enrich_data(remove_blacklisted(api.get_transactions()))
+    tickers, transactions = enrich_data(remove_hidden(api.get_transactions()))
     return render_template("index.html", transactions=transactions[::-1], tickers=tickers)
 
-def remove_blacklisted(transactions):
+def remove_hidden(transactions):
     hidden = get_hidden()
     active_transactions = copy.copy(transactions)
     for transaction in transactions:
         if str(transaction['id']) in hidden or transaction["side"] == "sell":
             active_transactions.remove(transaction)
     return active_transactions
+
+def hide_tx(txid):
+    txs = []
+    if os.path.exists("hidden.pkl"):
+        with open("hidden.pkl", "rb") as f:
+            txs = pickle.load(f)
+
+    if txid not in txs:
+        txs.append(txid)
+
+    with open("hidden.pkl", "wb") as f:
+        pickle.dump(txs, f)
 
 def get_hidden():
     txs = []
@@ -56,17 +68,7 @@ def enrich_data(transactions):
 def hide():
     args = request.args
     txid = args.get("id")
-
-    txs = []
-    if os.path.exists("hidden.pkl"):
-        with open("hidden.pkl", "rb") as f:
-            txs = pickle.load(f)
-
-    if txid not in txs:
-        txs.append(txid)
-
-    with open("hidden.pkl", "wb") as f:
-        pickle.dump(txs, f)
+    hide_tx(txid)
     return redirect('/')
 
 @app.route("/hideall")
@@ -83,6 +85,16 @@ def hideall():
     with open("hidden.pkl", "wb") as f:
         pickle.dump(txs, f)
     return redirect('/')
+
+@app.route("/sell", methods=['GET'])
+def sell():
+    args = request.args
+    txid = args.get("id")
+
+    for transaction in api.get_transactions():
+        if str(transaction["id"]) == str(txid):
+            api.sell(transaction["symbol"], transaction['amount'])
+
 
 @app.route("/transactions")
 def transactions():
