@@ -101,3 +101,5 @@ def sell():
 @app.route("/transactions")
 def transactions():
     return json.dumps(api.get_transactions())
+
+app.run(host='127.0.0.1',port=5001)
