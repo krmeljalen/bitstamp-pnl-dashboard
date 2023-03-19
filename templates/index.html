@@ -32,9 +32,9 @@
                 <td>{{ transaction['price'] }}</td>
                 <td>{{ (transaction['amount'] * transaction['price']) | int }} USD</td>
                     {% if transaction['current_price'] >  transaction['price'] %}
-                        <td><span class="badge badge-success">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} USD</span></td>
+                        <td><span class="badge badge-success">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} {{ transaction['fee']['currency'] }}</span></td>
                     {% else %}
-                        <td><span class="badge badge-danger">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} USD</span></td>
+                        <td><span class="badge badge-danger">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} {{ transaction['fee']['currency'] }}</span></td>
                     {% endif %}
                     <td><a href="#"><button type="button" class="btn btn-danger">Sell</button></a></td>
                     <td><a href="/hide?id={{ transaction['id'] }}"><button type="button" class="btn btn-light">Hide</button></a></td>
