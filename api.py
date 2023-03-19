@@ -8,7 +8,9 @@ class Bitstamp():
         })
 
     def get_transactions(self):
-        return self.exchange.fetchMyTrades()
+        transactions = self.exchange.fetchMyTrades()
+        print(transactions)
+        return transactions
 
     def sell(self, symbol, amount):
         try:
