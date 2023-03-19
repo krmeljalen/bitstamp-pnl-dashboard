@@ -8,9 +8,33 @@ class Bitstamp():
         })
 
     def get_transactions(self):
-        transactions = self.exchange.fetchMyTrades()
+        raw_transactions = self.exchange.fetchMyTrades()
+
+        transactions = {}
+
+        for raw_transaction in raw_transactions:
+            order = raw_transaction["order"]
+            if order not in transactions.keys():
+                transactions[order] = raw_transaction
+            else:
+                first_order_price = transactions[order]['price']
+                first_order_amount = transactions[order]['amount']
+                first_order_fee = transactions[order]['fee']['cost']
+
+                second_order_price = raw_transaction['price']
+                second_order_amount = raw_transaction['amount']
+                second_order_fee = raw_transaction['fee']['cost']
+            
+                total_amount = first_order_amount + second_order_amount
+                avg_price = (first_order_price * first_order_price + second_order_price * second_order_amount) / total_amount
+                total_fee = first_order_fee + second_order_fee
+
+                transactions[order]['price'] = avg_price
+                transactions[order]['amount'] = total_amount
+                transactions[order]['fee']['cost'] = total_fee
+
         print(transactions)
-        return transactions
+        return raw_transactions
 
     def sell(self, symbol, amount):
         try:
