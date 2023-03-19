@@ -29,9 +29,9 @@ class Bitstamp():
                 avg_price = (first_order_price * first_order_amount + second_order_price * second_order_amount) / total_amount
                 total_fee = first_order_fee + second_order_fee
 
-                transactions[order]['price'] = avg_price
+                transactions[order]['price'] = round(avg_price, 1)
                 transactions[order]['amount'] = total_amount
-                transactions[order]['fee']['cost'] = total_fee
+                transactions[order]['fee']['cost'] = round(total_fee)
 
         return_transactions = []
 
