@@ -32,7 +32,7 @@
                 <td>{{ transaction['symbol'] }}</td>
                 <td>{{ transaction['price'] }}</td>
                 <td>{{ (transaction['amount'] * transaction['price']) | int }} {{ transaction['fee']['currency'] }}</td>
-                <td><span class="badge badge-info">{{ transaction['fee']['cost'] }} {{ transaction['fee']['currency'] }}</span></td>
+                <td><span class="badge badge-info">{{ transaction['fee']['cost'] | int }} {{ transaction['fee']['currency'] }}</span></td>
                     {% if transaction['current_price'] >  transaction['price'] %}
                         <td><span class="badge badge-success">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} {{ transaction['fee']['currency'] }}</span></td>
                     {% else %}
