@@ -26,7 +26,7 @@ class Bitstamp():
                 second_order_fee = raw_transaction['fee']['cost']
             
                 total_amount = first_order_amount + second_order_amount
-                avg_price = (first_order_price * first_order_price + second_order_price * second_order_amount) / total_amount
+                avg_price = (first_order_price * first_order_amount + second_order_price * second_order_amount) / total_amount
                 total_fee = first_order_fee + second_order_fee
 
                 transactions[order]['price'] = avg_price
