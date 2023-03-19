@@ -33,8 +33,12 @@ class Bitstamp():
                 transactions[order]['amount'] = total_amount
                 transactions[order]['fee']['cost'] = total_fee
 
-        print(transactions)
-        return raw_transactions
+        return_transactions = []
+
+        for order in transactions.keys():
+            return_transactions.append(transactions[order])
+
+        return return_transactions
 
     def sell(self, symbol, amount):
         try:
