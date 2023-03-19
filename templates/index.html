@@ -19,6 +19,7 @@
             <th scope="col">Pair</th>
             <th scope="col">Price</th>
             <th scope="col">Amount</th>
+            <th scope="col">Fee</th>
             <th scope="col">PnL</th>
             <th scope="col"></th>
             <th scope="col"><a href="/hideall"><button type="button" class="btn btn-light">Hide all</button></a></th>
@@ -30,7 +31,8 @@
                 <td><span class="badge badge-success">{{ transaction['side'] }}</span></td>
                 <td>{{ transaction['symbol'] }}</td>
                 <td>{{ transaction['price'] }}</td>
-                <td>{{ (transaction['amount'] * transaction['price']) | int }} USD</td>
+                <td>{{ (transaction['amount'] * transaction['price']) | int }} {{ transaction['fee']['currency'] }}</td>
+                <td>{{ transaction['fee']['cost'] }} {{ transaction['fee']['currency'] }}</td>
                     {% if transaction['current_price'] >  transaction['price'] %}
                         <td><span class="badge badge-success">{{ (transaction['amount'] * (transaction['current_price'] - transaction['price'])) | int }} {{ transaction['fee']['currency'] }}</span></td>
                     {% else %}
